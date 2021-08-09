@@ -3,21 +3,22 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
+import javax.ws.rs.DELETE;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    private final Connection connect = Util.connect();
+    private final Connection connection = Util.connect();
 
     public UserDaoJDBCImpl() {
     }
 
     public void createUsersTable() {
-        try(Statement st = connect.createStatement()) {
+        try(Statement st = connection.createStatement()) {
 
-            st.executeUpdate("CREATE TABLE IF NOT EXISTS users (" +
+            st.executeUpdate("CREATE TABLE IF NOT EXISTS task113db (" +
                             "id BIGINT NOT NULL AUTO_INCREMENT," +
                             "name VARCHAR(255), " +
                             "lastname VARCHAR(255), " +
@@ -29,9 +30,9 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try(Statement st = connect.createStatement()) {
+        try(Statement st = connection.createStatement()) {
 
-            st.executeUpdate("DROP TABLE IF EXISTS users;");
+            st.executeUpdate("DROP TABLE IF EXISTS task113db;");
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -40,13 +41,13 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         try(PreparedStatement st =
-                    connect.prepareStatement("INSERT INTO users (name, lastname, age) VALUES (?,?,?);")) {
+                    connection.prepareStatement("INSERT INTO task113db (name, lastname, age) VALUES (?,?,?);")) {
 
             st.setString(1, name); // index от 1
             st.setString(2, lastName);
             st.setByte(3, age);
 
-            st.executeUpdate(); // Выполнить запрос
+            st.executeUpdate();
 
             System.out.println("Пользователь с именем " + name + " добавлен в базу данных");
 
@@ -55,8 +56,11 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public void removeUserById(long id) { //
-        try(Statement st = connect.createStatement()) {
+    public void removeUserById(long id) {
+        try(PreparedStatement  st = connection.prepareStatement("DELETE FROM task113db WHERE id = ?;")) {
+
+            st.setLong(1, id);
+            st.executeUpdate();
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -66,8 +70,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
 
-        try (Statement st = connect.createStatement();
-             ResultSet resultSet = st.executeQuery("SELECT * FROM users;")){
+        try (Statement st = connection.createStatement();
+             ResultSet resultSet = st.executeQuery("SELECT * FROM task113db;")){
 
             while(resultSet.next()){
                 Long id = resultSet.getLong("id");
@@ -87,9 +91,9 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try(Statement st = connect.createStatement()) {
+        try(Statement st = connection.createStatement()) {
 
-            st.executeUpdate("TRUNCATE TABLE users;");
+            st.executeUpdate("TRUNCATE TABLE task113db;");
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();

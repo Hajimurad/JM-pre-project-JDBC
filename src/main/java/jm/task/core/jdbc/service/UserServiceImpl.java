@@ -5,24 +5,24 @@ import jm.task.core.jdbc.model.User;
 
 import java.util.List;
 
-public class UserServiceImpl implements UserService { // service переиспользует методы dao
-    UserDaoJDBCImpl reuse = new UserDaoJDBCImpl();
+public class UserServiceImpl implements UserService {
+    UserDaoJDBCImpl daoReuse = new UserDaoJDBCImpl();
 
-    public void createUsersTable() { reuse.createUsersTable();
+    public void createUsersTable() { daoReuse.createUsersTable();
     }
 
-    public void dropUsersTable() { reuse.dropUsersTable();
+    public void dropUsersTable() { daoReuse.dropUsersTable();
     }
 
-    public void saveUser(String name, String lastName, byte age) { reuse.saveUser(name, lastName, age);
+    public void saveUser(String name, String lastName, byte age) { daoReuse.saveUser(name, lastName, age);
     }
 
-    public void removeUserById(long id) { reuse.removeUserById(id);
+    public void removeUserById(long id) { daoReuse.removeUserById(id);
     }
 
-    public List<User> getAllUsers() { return reuse.getAllUsers();
+    public List<User> getAllUsers() { return daoReuse.getAllUsers();
     }
 
-    public void cleanUsersTable() { reuse.cleanUsersTable();
+    public void cleanUsersTable() { daoReuse.cleanUsersTable();
     }
 }

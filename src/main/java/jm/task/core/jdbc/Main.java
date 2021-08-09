@@ -1,20 +1,23 @@
 package jm.task.core.jdbc;
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
+import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
 
 public class Main {
     public static void main(String[] args) {
-        UserDaoJDBCImpl interconnect = new UserDaoJDBCImpl();
+        UserService service = new UserServiceImpl();
 
-        interconnect.createUsersTable();
+        service.createUsersTable();
 
-        interconnect.saveUser("Ivan", "Ivanov", (byte) 12);
-        interconnect.saveUser("Masha", "Sergeeva", (byte) 20);
-        interconnect.saveUser("Paul", "Baul", (byte) 17);
-        interconnect.saveUser("Jim", "Mim", (byte) 26);
+        service.saveUser("Ivan", "Ivanov", (byte) 12);
+        service.saveUser("Masha", "Sergeeva", (byte) 20);
+        service.saveUser("Paul", "Baul", (byte) 17);
+        service.saveUser("Jim", "Mim", (byte) 26);
 
-        interconnect.getAllUsers().forEach(System.out::println);
-        interconnect.cleanUsersTable();
-        interconnect.dropUsersTable();
+        // service.removeUserById(2);
+
+        System.out.println(service.getAllUsers());
+        service.cleanUsersTable();
+        service.dropUsersTable();
     }
 }
